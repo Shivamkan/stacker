@@ -39,7 +39,8 @@ pygame.init()
 screenY = int(650)
 screenX = int((screenY / 16) * 9)
 colors = 10
-auto = 10
+auto = 5
+sound = pygame.mixer.Sound("perfect.mp3")
 
 screen = pygame.display.set_mode((screenX, screenY))
 
@@ -53,6 +54,7 @@ class main:
 		self.place = 1
 		self.lastsuf = 0
 		self.last = self.x
+		self.dir = 1
 
 	def draw(self, screen):
 		if self.lastsuf:
@@ -70,7 +72,14 @@ class main:
 			self.hue = 0
 
 	def move(self):
-		self.x += 5
+		if self.dir == 1:
+			self.x += 1
+		else:
+			self.x -= 1
+		if self.x + self.width >= screenX:
+			self.dir = 0
+		elif self.x <= 0:
+			self.dir = 1
 
 	def handle_input(self):
 		events = pygame.event.get()
@@ -88,16 +97,18 @@ class main:
 		self.place = 1
 		if abs(self.x - self.last) < auto:
 			self.x = self.last
+			sound.play()
 		elif self.x > self.last:
 			self.width -= self.x - self.last
 		else:
 			self.width -= self.last - self.x
 			self.x = self.last
+		self.dir = 1
 
 main = main()
 clock = pygame.time.Clock()
 while True:
-	clock.tick(10)
+	clock.tick(60)
 	screen.fill((100, 100, 100))
 	main.draw(screen)
 	main.move()
