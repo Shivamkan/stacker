@@ -8,7 +8,7 @@ colors = 100
 auto = 5
 perfectsound = pygame.mixer.Sound("perfect.mp3")
 expladsound = pygame.mixer.Sound("ta_da.mp3")
-font = pygame.font.Font(r"font.ttf", int(screenX/6), italic=True)
+font = pygame.font.Font(r"font.ttf", int(screenX / 6), italic=True)
 # Do Not Change Anything after this point ==========================================
 screen = pygame.display.set_mode((screenX, screenY))
 down = 0
@@ -63,6 +63,7 @@ class main:
 		self.last = self.x
 		self.dir = 1
 		self.score = 0
+		self.animeion = 0
 
 	def draw(self, screen):
 		if self.lastsuf and not down:
@@ -77,8 +78,16 @@ class main:
 		screen.blit(score, (0, -10))
 		scoresize = score.get_size()
 		score = font.render(str(self.score), 0, hls(self.scorecolor, 255, 255 / 2))
-		screen.blit(score, (scoresize[0]/2-score.get_size()[0]/2, scoresize[1]-20))
+		screen.blit(score, (scoresize[0] / 2 - score.get_size()[0] / 2, scoresize[1] - 20))
 		self.scorecolor += 0.5
+		if self.animeion:
+			self.animeion -= 1
+			x = self.hue + 128
+			x %= 255
+			width = ((self.width + 20) / 20) * (20 - self.animeion)
+			pos = self.x + (self.width / 2)
+			pygame.draw.line(screen, hls(x, 255, 255 / 2), (pos - width / 2, self.y + self.blockhight),
+			                 (pos + width/2, self.y + self.blockhight), 5)
 		if self.scorecolor > 254:
 			self.scorecolor = 0
 
@@ -115,6 +124,7 @@ class main:
 			self.x = self.last
 			self.score += 1
 			self.perfect += 1
+			self.animeion = 20
 			if self.perfect > 5:
 				self.width += 20
 				self.x -= 10
@@ -126,7 +136,7 @@ class main:
 			self.width -= self.x - self.last
 			if self.width > 0:
 				self.score += 1
-			self.perfect =0
+			self.perfect = 0
 		else:
 			self.width -= self.last - self.x
 			self.x = self.last
