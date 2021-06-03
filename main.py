@@ -4,9 +4,10 @@ pygame.init()
 
 screenY = int(650)
 screenX = int((screenY / 16) * 9)
-colors = 50
-auto = 2
-sound = pygame.mixer.Sound("perfect.mp3")
+colors = 100
+auto = 5
+perfectsound = pygame.mixer.Sound("perfect.mp3")
+expladsound = pygame.mixer.Sound("ta_da.mp3")
 font = pygame.font.Font(r"font.ttf", int(screenX/6), italic=True)
 # Do Not Change Anything after this point ==========================================
 screen = pygame.display.set_mode((screenX, screenY))
@@ -50,6 +51,7 @@ def hls(h, s, l):
 
 class main:
 	def __init__(self):
+		self.perfect = 0
 		self.blockhight = int(screenY / 30)
 		self.hue = 0
 		self.scorecolor = 0
@@ -111,16 +113,26 @@ class main:
 		self.place = 1
 		if abs(self.x - self.last) < auto:
 			self.x = self.last
-			sound.play()
+			self.score += 1
+			self.perfect += 1
+			if self.perfect > 5:
+				self.width += 20
+				self.x -= 10
+				self.perfect = 0
+				expladsound.play()
+			else:
+				perfectsound.play()
 		elif self.x > self.last:
 			self.width -= self.x - self.last
 			if self.width > 0:
 				self.score += 1
+			self.perfect =0
 		else:
 			self.width -= self.last - self.x
 			self.x = self.last
 			if self.width > 0:
 				self.score += 1
+			self.perfect = 0
 		self.dir = 1
 
 	def reset(self):
