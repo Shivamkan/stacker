@@ -4,7 +4,7 @@ pygame.init()
 
 screenY = int(650)
 screenX = int((screenY / 16) * 9)
-colors = 10
+colors = 50
 auto = 2
 sound = pygame.mixer.Sound("perfect.mp3")
 #Do Not Change Anything after this ponit
@@ -56,11 +56,12 @@ class main:
 		self.lastsuf = 0
 		self.last = self.x
 		self.dir = 1
+		self.score = 0
 
 	def draw(self, screen):
 		if self.lastsuf and not down:
 			screen.blit(self.lastsuf,(0,0))
-		elif down:
+		elif down and self.lastsuf:
 			screen.blit(self.lastsuf,(0,self.blockhight))
 		pygame.draw.rect(screen, hls(self.hue, 255, 255 / 2), (self.x, self.y, self.width, self.blockhight))
 		if self.place == 1:
@@ -124,6 +125,8 @@ def resetgame(main):
 	main.lastsuf = 0
 	main.last = main.x
 	main.dir = 1
+	main.score = 0
+	down = 0
 
 main = main()
 clock = pygame.time.Clock()
