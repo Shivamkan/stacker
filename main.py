@@ -116,6 +116,7 @@ class main:
 			self.hue = 0
 
 def resetgame(main):
+	global down
 	main.blockhight = int(screenY / 30)
 	main.hue = 0
 	main.y = screenY - main.blockhight
